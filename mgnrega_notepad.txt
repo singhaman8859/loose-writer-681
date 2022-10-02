@@ -1,0 +1,110 @@
+
+BDO --> username is BDO and password is BDO.
+
+GPM --> email whatever created by the BDO. 
+
+
+
+create table user_registration (
+fname varchar(19) NOT NULL,
+lname varchar(19) NOT NULL,
+email varchar(19) PRIMARY KEY,
+mobile varchar(12) UNIQUE NOT NULL,
+voterId varchar(10) NOT NULL UNIQUE,
+rationId varchar(15) NOT NULL UNIQUE,
+aadhar varchar(12)NOT NULL UNIQUE,
+pan varchar(10) NOT NULL UNIQUE,
+password varchar(30) NOT NULL
+);
+
+
+
+create table mgnrega_project(
+projid int primary key,
+projname varchar(19) unique not null,
+projdesc varchar(30) ,
+pro_duration int ,
+proj_startdate date
+);
+
+
+create table mgnrega_gpm(
+gpmid int auto_increment  primary key,
+gpmname varchar(19) not null,
+gpmmobile varchar (10) not null,
+gpmemail varchar(30) not null unique,
+gpmvill varchar (30) not null,
+gpmaadhar varchar(12) not null unique,
+password varchar(30) not null
+);
+
+create table mgnrega_gpm_project(
+projid int,
+gpmid int,
+foreign key (projid) references mgnrega_project(projid), 
+foreign key (gpmid) references mgnrega_gpm(gpmid)
+
+);
+
+create table mgnrega_employee_project(
+    -> projid int,
+    -> empid int,
+    -> foreign key (projid) references mgnrega_project(projid),
+    -> foreign key (empid) references mgnrega_employee(empid)
+    -> );
+
+
+create table mgnrega_employee(
+empid int auto_increment  primary key,
+empname varchar(19),
+empmobile varchar(10),
+empemail varchar(30),
+empadd varchar(30),
+empaadhar varchar(12),
+empwages int not null,
+total_days int ,
+password varchar(30)
+);
+
+
+
+2. Create a project.
+
+insert into mgnrega_project values(1,'clean india', 'for cleaniness of india',6,'1999-09-09');
+
+
+3. View List Of Project.
+3.select * from mgnrega_project;
+
+4. Create new Gram Panchayat Member(GPM).
+ insert into  mgnrega_gpm (gpmname,gpmmobile,gpmemail,gpmvill,gpmaadhar)values ('aman','0000000000','aman.gmail','delhi',0000);
+
+5. View all the GPM.
+select * from mgnrega_gpm;
+
+6. Allocate  Project to GPM
+insert into mgnrega_gpm_project values(1,1);
+
+7. See List of Employee working on that Project and their wages.
+
+select mp.projname, me.empname,me.empadd,me.empmobile,me.total_days,me.empwages  from mgnrega_employee me 
+inner join mgnrega_project mp inner join mgnrega_employee_project mep 
+on mep.projid = mp.projid and mep.empid = me.empid where mp.projname = 'clean india';
+
+2. Create Employee.
+insert into mgnrega_employee (empname,empmobile,empemail,empadd,empaadhar,empwages) values ('one','0101010101','one.gmail','onepur','-1-1-1-1',1000); 
+
+
+3. View the Details of Employee
+select * from mgnrega_employee;
+
+4. Assign Employee to a Project.
+
+insert into mgnrega_employee_project values(1,1);
+
+
+5. View total number of days Employee worked in a project and also their wages.
+ select me.total_days,me.empwages,mp.projname from mgnrega_employee me 
+inner join mgnrega_project mp inner join mgnrega_employee_project mep 
+on mep.projid = mp.projid and mep.empid = me.empid where mp.projname = 'clean india';
+
